@@ -1,0 +1,26 @@
+import { getModel } from "./utils";
+import { createParsedCompletion } from "@anvia/core";
+import "dotenv/config";
+import z from "zod";
+
+const SearchQueriesSchema = z.object({
+    queries: z.array(z.string()),
+});
+
+const userInput = "Garmin"
+
+const CompanyInformationSchema = z.object({
+  companyName: z.string().describe("Official company name"),
+  website: z.string().describe("Official website"),
+  industry: z.string().describe("Main industry"),
+  description: z.string().describe("Short company profile"),
+});
+
+const response = await createParsedCompletion(getModel(), {
+    instructions:
+    "Generate 3 Google search queries to find company information.",
+    input: userInput,
+    schema: CompanyInformationSchema,
+});
+
+console.log(response.data);
